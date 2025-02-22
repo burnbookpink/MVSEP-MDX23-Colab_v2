@@ -518,7 +518,7 @@ class EnsembleDemucsMDXMusicSeparationModel:
             "InstVoc",
             "VitLarge",
             "VOCFT",
-            "InstHQ4"
+            "InstHQ5"
         ]
 
         vocals_model_outputs = []
@@ -871,13 +871,13 @@ if __name__ == '__main__':
     m.add_argument("--cpu", action='store_true', help="Choose CPU instead of GPU for processing. Can be very slow.")
     m.add_argument("--overlap_demucs", type=float, help="Overlap of splited audio for light models. Closer to 1.0 - slower", required=False, default=0.1)
     m.add_argument("--overlap_VOCFT", type=float, help="Overlap of splited audio for heavy models. Closer to 1.0 - slower", required=False, default=0.1)
-    m.add_argument("--overlap_InstHQ4", type=float, help="Overlap of splited audio for heavy models. Closer to 1.0 - slower", required=False, default=0.1)
+    m.add_argument("--overlap_InstHQ5", type=float, help="Overlap of splited audio for heavy models. Closer to 1.0 - slower", required=False, default=0.1)
     m.add_argument("--overlap_VitLarge", type=int, help="Overlap of splited audio for heavy models. Closer to 1.0 - slower", required=False, default=1)
     m.add_argument("--overlap_InstVoc", type=int, help="MDXv3 overlap", required=False, default=2)
     m.add_argument("--overlap_BSRoformer", type=int, help="BSRoformer overlap", required=False, default=2)
     m.add_argument("--weight_InstVoc", type=float, help="Weight of MDXv3 model", required=False, default=3)
     m.add_argument("--weight_VOCFT", type=float, help="Weight of VOC-FT model", required=False, default=1)
-    m.add_argument("--weight_InstHQ4", type=float, help="Weight of instHQ4 model", required=False, default=1)
+    m.add_argument("--weight_InstHQ5", type=float, help="Weight of instHQ5 model", required=False, default=1)
     m.add_argument("--weight_VitLarge", type=float, help="Weight of VitLarge model", required=False, default=1)
     m.add_argument("--weight_BSRoformer", type=float, help="Weight of BS-Roformer model", required=False, default=8)
     m.add_argument("--weight_Kim_MelRoformer", type=float, help="Weight of Kim_MelRoformer model", required=False, default=10)
@@ -889,7 +889,7 @@ if __name__ == '__main__':
     m.add_argument("--BSRoformer_model", type=str, help="Which checkpoint to use", required=False, default="ep_317_1297")
     m.add_argument("--use_InstVoc", action='store_true', help="use instVoc in vocal ensemble")
     m.add_argument("--use_VitLarge", action='store_true', help="use VitLarge in vocal ensemble")
-    m.add_argument("--use_InstHQ4", action='store_true', help="use InstHQ4 in vocal ensemble")
+    m.add_argument("--use_InstHQ5", action='store_true', help="use InstHQ5 in vocal ensemble")
     m.add_argument("--use_VOCFT", action='store_true', help="use VOCFT in vocal ensemble")
     m.add_argument("--output_format", type=str, help="Output audio folder", default="PCM_16")
     m.add_argument("--input_gain", type=int, help="input volume gain", required=False, default=0)
@@ -915,10 +915,10 @@ if __name__ == '__main__':
         print(f'overlap_VOCFT: {options["overlap_VOCFT"]}')
         print(f'weight_VOCFT: {options["weight_VOCFT"]}\n')
         
-    print(f'use_InstHQ4: {options["use_InstHQ4"]}')
-    if options["use_InstHQ4"] is True:
-        print(f'overlap_InstHQ4: {options["overlap_InstHQ4"]}')
-        print(f'weight_InstHQ4: {options["weight_InstHQ4"]}\n')
+    print(f'use_InstHQ5: {options["use_InstHQ5"]}')
+    if options["use_InstHQ5"] is True:
+        print(f'overlap_InstHQ5: {options["overlap_InstHQ5"]}')
+        print(f'weight_InstHQ5: {options["weight_InstHQ5"]}\n')
 
     print(f'vocals_only: {options["vocals_only"]}')
     
