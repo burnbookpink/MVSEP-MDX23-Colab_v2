@@ -610,7 +610,7 @@ class EnsembleDemucsMDXMusicSeparationModel:
                     torch.cuda.empty_cache()
                     weights.append(options.get(f"weight_{model_name}"))
 
-                elif model_name == "InstHQ4":
+                elif model_name == "InstHQ5":
                     print(f'Processing vocals with {model_name} model...')
                     overlap = overlap_MDX
                     sources2 = 0.5 * demix_wrapper(
