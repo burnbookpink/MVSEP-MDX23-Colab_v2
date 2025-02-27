@@ -477,7 +477,7 @@ class EnsembleDemucsMDXMusicSeparationModel:
         elif model_name == "InstHQ5" and not hasattr(self, 'infer_session2'):
             print(f'Loading {model_name} into memory')
             model_path = os.path.join(self.model_folder, 'UVR-MDX-NET-Inst_HQ_5.onnx')
-            remote_url = 'https://github.com/TRvlvr/model_repo_/releases/download/all_public_uvr_models/UVR-MDX-NET-Inst_HQ_5.onnx'
+            remote_url = 'https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/UVR-MDX-NET-Inst_HQ_5.onnx'
             self.infer_session2 = self.load_onnx_model(model_path, remote_url)
             self.mdx_models2 = get_models('tdf_extra', load=False, device=self.device, vocals_model_type=3)
 
