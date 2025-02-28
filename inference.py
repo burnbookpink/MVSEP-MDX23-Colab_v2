@@ -548,7 +548,7 @@ class EnsembleDemucsMDXMusicSeparationModel:
                     del sources_bs
                     torch.cuda.empty_cache()
                     weights.append(options.get(f"weight_{model_name}"))
-                    
+
                 elif model_name == "SCNetXL":
                     print(f'Processing vocals with {model_name} model...')
                     sources_scnet = demix_new_wrapper(mixed_sound_array.T, self.device, self.model_musdb18_scnet_xl, self.config_musdb18_scnet_xl, dim_t=256, bigshifts=options["BigShifts"])
@@ -558,9 +558,9 @@ class EnsembleDemucsMDXMusicSeparationModel:
                         print(f'Unloading {model_name} from memory')
                         self.model_scnet.cpu()
                         del self.model_scnet  
-                     del sources_scnet
-                     torch.cuda.empty_cache()
-                     weights.append(options.get(f"weight_{model_name}"))
+                    del sources_scnet
+                    torch.cuda.empty_cache()
+                    weights.append(options.get(f"weight_{model_name}"))
 
                 elif model_name == "Kim_MelRoformer":
                     print(f'Processing vocals with {model_name} model...')
