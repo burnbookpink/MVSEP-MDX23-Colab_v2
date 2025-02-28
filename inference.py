@@ -558,7 +558,7 @@ class EnsembleDemucsMDXMusicSeparationModel:
                         print(f'Unloading {model_name} from memory')
                         self.model_scnet.cpu()
                         del self.model_scnet  
-                     del sources_scnet
+                    del sources_scnet
                      torch.cuda.empty_cache()
                      weights.append(options.get(f"weight_{model_name}"))
 
