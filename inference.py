@@ -447,7 +447,13 @@ class EnsembleDemucsMDXMusicSeparationModel:
             bs_model_name = "model_bs_roformer_ep_368_sdr_12.9628" if options["BSRoformer_model"] == "ep_368_1296" else "model_bs_roformer_ep_317_sdr_12.9755"
             remote_url_ckpt = f'https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/{bs_model_name}.ckpt'
             remote_url_yaml = f'https://raw.githubusercontent.com/TRvlvr/application_data/main/mdx_model_data/mdx_c_configs/{bs_model_name}.yaml'
-            self.model_bsrofo, self.config_bsrofo = self.load_model(bs_model_name, remote_url_ckpt, remote_url_yaml, BSRoformer)
+            self.model_bsrofo, self.config_bsrofo = self.load_model(bs_model_name, remote_url_ckpt, remote_url_yaml, BSRoformer)     
+        
+        elif model_name == "SCNet XL" and not hasattr(self, 'model_scnet'):
+            print(f'Loading {model_name} into memory')   
+            remote_url_ckpt = f'https://github.com/ZFTurbo/Music-Source-Separation-Training/releases/download/v1.0.13/model_scnet_ep_54_sdr_9.8051.ckpt'
+            remote_url_yaml = f'https://github.com/ZFTurbo/Music-Source-Separation-Training/releases/download/v1.0.13/config_musdb18_scnet_xl.yaml'
+            self.model_scnet, self.config_scnet = self.load_model('SCNetXL', remote_url_ckpt, remote_url_yaml, SCNetXL)
 
         elif model_name == "Kim_MelRoformer" and not hasattr(self, 'model_melrofo'):
             print(f'Loading {model_name} into memory')
@@ -514,6 +520,7 @@ class EnsembleDemucsMDXMusicSeparationModel:
 
         vocals_model_names = [
             "BSRoformer",
+            "SCNetXL"
             "Kim_MelRoformer",
             "InstVoc",
             "VitLarge",
@@ -541,6 +548,18 @@ class EnsembleDemucsMDXMusicSeparationModel:
                     del sources_bs
                     torch.cuda.empty_cache()
                     weights.append(options.get(f"weight_{model_name}"))
+                    
+                    elif model_name == "SCNetXL:
+                    print(f'Processing vocals with {model_name} model...)
+                    sources_scnet = demix_new_wrapper(mixed_sound_array.T, self.device, self.model_musdb18_scnet_xl, self.config_musdb18_scnet_xl, dim_t=256, bigshifts=options["BigShifts"])
+                    vocals_scnet = match_array_shapes(sources_scnet, mixed_sound_array.T)
+                    vocals_model_outputs.append(vocals_scnet)
+                    if not options['large_gpu']:
+                        print(f'Unloading {model_name} from memory')
+                        self.model_scnet.cpu()
+                       del sources_scnet
+                       torch.cuda.empty_cache()
+                       weights.append(options.get(f"weight_{model_name}"))
 
                 elif model_name == "Kim_MelRoformer":
                     print(f'Processing vocals with {model_name} model...')
@@ -875,11 +894,13 @@ if __name__ == '__main__':
     m.add_argument("--overlap_VitLarge", type=int, help="Overlap of splited audio for heavy models. Closer to 1.0 - slower", required=False, default=1)
     m.add_argument("--overlap_InstVoc", type=int, help="MDXv3 overlap", required=False, default=2)
     m.add_argument("--overlap_BSRoformer", type=int, help="BSRoformer overlap", required=False, default=2)
+    m.add_argument("--overlap_SCNetXL", type=int, help="SCNetXL overlap", required=False, default=4)
     m.add_argument("--weight_InstVoc", type=float, help="Weight of MDXv3 model", required=False, default=3)
     m.add_argument("--weight_VOCFT", type=float, help="Weight of VOC-FT model", required=False, default=1)
     m.add_argument("--weight_InstHQ5", type=float, help="Weight of instHQ5 model", required=False, default=1)
     m.add_argument("--weight_VitLarge", type=float, help="Weight of VitLarge model", required=False, default=1)
     m.add_argument("--weight_BSRoformer", type=float, help="Weight of BS-Roformer model", required=False, default=8)
+    m.add_argument("--weight_SCNetXL", type=float, help="Weight of SCNetXL model", required=False, default=10)
     m.add_argument("--weight_Kim_MelRoformer", type=float, help="Weight of Kim_MelRoformer model", required=False, default=10)
     m.add_argument("--BigShifts", type=int, help="Managing MDX 'BigShifts' trick value.", required=False, default=3)
     m.add_argument("--vocals_only",  action='store_true', help="Vocals + instrumental only")
@@ -887,6 +908,7 @@ if __name__ == '__main__':
     m.add_argument("--use_Kim_MelRoformer", action='store_true', help="use Kim MelBand Roformer in vocal ensemble")
     
     m.add_argument("--BSRoformer_model", type=str, help="Which checkpoint to use", required=False, default="ep_317_1297")
+    m.add_argument("--use_SCNetXL", action='store_true', help="use SCNetXL in vocal ensemble")
     m.add_argument("--use_InstVoc", action='store_true', help="use instVoc in vocal ensemble")
     m.add_argument("--use_VitLarge", action='store_true', help="use VitLarge in vocal ensemble")
     m.add_argument("--use_InstHQ5", action='store_true', help="use InstHQ5 in vocal ensemble")
