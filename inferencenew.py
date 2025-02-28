@@ -448,11 +448,13 @@ class EnsembleDemucsMDXMusicSeparationModel:
             remote_url_ckpt = f'https://github.com/TRvlvr/model_repo/releases/download/all_public_uvr_models/{bs_model_name}.ckpt'
             remote_url_yaml = f'https://raw.githubusercontent.com/TRvlvr/application_data/main/mdx_model_data/mdx_c_configs/{bs_model_name}.yaml'
             self.model_bsrofo, self.config_bsrofo = self.load_model(bs_model_name, remote_url_ckpt, remote_url_yaml, BSRoformer)     
-elif model_name == "SCNet XL" and not hasattr(self, 'model_scnet'):
+        
+        
+         elif model_name == "SCNet XL" and not hasattr(self, 'model_scnet'):
             print(f'Loading {model_name} into memory')   
             remote_url_ckpt = f'https://github.com/ZFTurbo/Music-Source-Separation-Training/releases/download/v1.0.13/model_scnet_ep_54_sdr_9.8051.ckpt'
             remote_url_yaml = f'https://github.com/ZFTurbo/Music-Source-Separation-Training/releases/download/v1.0.13/config_musdb18_scnet_xl.yaml'
-            
+            self.model_scnet, self.config_scnet = self.load_model('SCNetXL', remote_url_ckpt, remote_url_yaml, SCNetXL)
 
         elif model_name == "Kim_MelRoformer" and not hasattr(self, 'model_melrofo'):
             print(f'Loading {model_name} into memory')
