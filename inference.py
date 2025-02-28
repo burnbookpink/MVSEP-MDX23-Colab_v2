@@ -556,8 +556,9 @@ class EnsembleDemucsMDXMusicSeparationModel:
                     vocals_model_outputs.append(vocals_scnet)
                     if not options['large_gpu']:
                         print(f'Unloading {model_name} from memory')
-                        del self.model_scnet.cpu()
-                     del sources_scnet
+                        self.model_scnet.cpu()
+                        del self.model_scnet  
+                    del sources_scnet
                      torch.cuda.empty_cache()
                      weights.append(options.get(f"weight_{model_name}"))
 
