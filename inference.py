@@ -557,9 +557,9 @@ class EnsembleDemucsMDXMusicSeparationModel:
                     if not options['large_gpu']:
                         print(f'Unloading {model_name} from memory')
                         self.model_scnet.cpu()
-                       del sources_scnet
-                       torch.cuda.empty_cache()
-                       weights.append(options.get(f"weight_{model_name}"))
+                     del sources_scnet
+                     torch.cuda.empty_cache()
+                     weights.append(options.get(f"weight_{model_name}"))
 
                 elif model_name == "Kim_MelRoformer":
                     print(f'Processing vocals with {model_name} model...')
