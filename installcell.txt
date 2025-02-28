@@ -1,0 +1,9 @@
+#@markdown #Installation
+#@markdown *Run this cell to install MVSep-MDX23*
+print('Installing... This will take between 1 and 15 minutes, depending of how crappy Colab currently is...')
+%cd /content
+!git clone -b v2.6 https://github.com/stellarcore/MVSEP-MDX23-Colab_v2.git  &> /dev/null
+%cd /content/MVSEP-MDX23-Colab_v2
+print('Installing dependencies...')
+!pip install -r requirements.txt &> /dev/null
+print('Installation done !')
