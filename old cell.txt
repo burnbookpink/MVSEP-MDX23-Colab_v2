@@ -1,0 +1,113 @@
+#@markdown #Separation
+from pathlib import Path
+import glob
+
+%cd /content/MVSEP-MDX23-Colab_v2
+
+#@markdown ---
+#@markdown #### separation config:
+input = '/content/drive/MyDrive/input' #@param {type:"string"}
+output_folder = '/content/drive/MyDrive/output' #@param {type:"string"}
+
+output_format = 'FLAC' #@param ["PCM_16", "FLOAT", "FLAC"]
+Separation_mode = 'Vocals/Instrumental' #@param ["Vocals/Instrumental", "4-STEMS"]
+input_gain = 0 #@param [0, -3, -6] {type:"raw"}
+restore_gain_after_separation = False #@param {type:"boolean"}
+filter_vocals_below_50hz = False #@param {type:"boolean"}
+#@markdown ___
+##@markdown
+
+#@markdown  ### Model config:
+
+#@markdown  *Set BigShifts=1 to disable that feature*
+BigShifts = 3 #@param {type:"slider", min:1, max:41, step:1}
+#@markdown ---
+BSRoformer_model = 'ep_368_1296' #@param ["ep_317_1297", "ep_368_1296"]
+weight_BSRoformer = 9.18 #@param {type:"slider", min:0, max:10, step:0.1}
+weight_Kim_MelRoformer = 10 #@param {type:"slider", min:0, max:10, step:0.1}
+weight_InstVoc = 3.39 #@param {type:"slider", min:0, max:10, step:0.1}
+#@markdown ---
+use_VitLarge = False #@param {type:"boolean"}
+weight_VitLarge = 1 #@param {type:"slider", min:0, max:10, step:0.1}
+#@markdown ---
+use_InstHQ4 = False #@param {type:"boolean"}
+weight_InstHQ4 = 2 #@param {type:"slider", min:0, max:10, step:0.1}
+overlap_InstHQ4 = 0.1 #@param {type:"slider", min:0, max:0.95, step:0.05}
+#@markdown ---
+use_VOCFT = False #@param {type:"boolean"}
+weight_VOCFT = 2 #@param {type:"slider", min:0, max:10, step:0.1}
+overlap_VOCFT = 0.1 #@param {type:"slider", min:0, max:0.95, step:0.05}
+#@markdown ---
+#@markdown  *Demucs is only used in 4-STEMS mode.*
+overlap_demucs = 0.6 #@param {type:"slider", min:0, max:0.95, step:0.05}
+
+use_InstVoc_ = '--use_InstVoc' #forced use
+use_BSRoformer_ =  '--use_BSRoformer' #forced use
+use_Kim_MelRoformer_ =  '--use_Kim_MelRoformer' #forced use
+
+use_VOCFT_ = '--use_VOCFT' if use_VOCFT is True else ''
+use_VitLarge_ = '--use_VitLarge' if use_VitLarge is True else ''
+use_InstHQ4_ = '--use_InstHQ4' if use_InstHQ4 is True else ''
+restore_gain = '--restore_gain' if restore_gain_after_separation is True else ''
+vocals_only = '--vocals_only' if Separation_mode == 'Vocals/Instrumental' else ''
+filter_vocals = '--filter_vocals' if filter_vocals_below_50hz is True else ''
+
+if Path(input).is_file():
+  file_path = input
+  Path(output_folder).mkdir(parents=True, exist_ok=True)
+  !python inference.py \
+        --input_audio "{file_path}" \
+        --BSRoformer_model {BSRoformer_model} \
+        --weight_BSRoformer {weight_BSRoformer} \
+        --weight_Kim_MelRoformer {weight_Kim_MelRoformer} \
+        --weight_InstVoc {weight_InstVoc} \
+        --weight_InstHQ4 {weight_InstHQ4} \
+        --weight_VOCFT {weight_VOCFT} \
+        --weight_VitLarge {weight_VitLarge} \
+        --overlap_demucs {overlap_demucs} \
+        --overlap_VOCFT {overlap_VOCFT} \
+        --overlap_InstHQ4 {overlap_InstHQ4} \
+        --output_format {output_format} \
+        --BigShifts {BigShifts} \
+        --output_folder "{output_folder}" \
+        --input_gain {input_gain} \
+        {filter_vocals} \
+        {restore_gain} \
+        {vocals_only} \
+        {use_VitLarge_} \
+        {use_VOCFT_} \
+        {use_InstHQ4_} \
+        {use_InstVoc_} \
+        {use_BSRoformer_} \
+        {use_Kim_MelRoformer_}
+
+
+else:
+    file_paths = sorted(glob.glob(input + "/*"))[:]
+    input_audio_args = ' '.join([f'"{path}"' for path in file_paths])
+    Path(output_folder).mkdir(parents=True, exist_ok=True)
+    !python inference.py \
+        --input_audio {input_audio_args} \
+        --BSRoformer_model {BSRoformer_model} \
+        --weight_BSRoformer {weight_BSRoformer} \
+        --weight_Kim_MelRoformer {weight_Kim_MelRoformer} \
+        --weight_InstVoc {weight_InstVoc} \
+        --weight_InstHQ4 {weight_InstHQ4} \
+        --weight_VOCFT {weight_VOCFT} \
+        --weight_VitLarge {weight_VitLarge} \
+        --overlap_demucs {overlap_demucs} \
+        --overlap_VOCFT {overlap_VOCFT} \
+        --overlap_InstHQ4 {overlap_InstHQ4} \
+        --output_format {output_format} \
+        --BigShifts {BigShifts} \
+        --output_folder "{output_folder}" \
+        --input_gain {input_gain} \
+        {filter_vocals} \
+        {restore_gain} \
+        {vocals_only} \
+        {use_VitLarge_} \
+        {use_VOCFT_} \
+        {use_InstHQ4_} \
+        {use_InstVoc_} \
+        {use_BSRoformer_} \
+        {use_Kim_MelRoformer_}
