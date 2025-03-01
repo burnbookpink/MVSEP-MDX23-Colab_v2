@@ -40,7 +40,7 @@ from modules.tfc_tdf_v3 import TFC_TDF_net, STFT
 from modules.segm_models import Segm_Models_Net
 from modules.bs_roformer import BSRoformer
 from modules.bs_roformer import MelBandRoformer
-from modules.scnet import SCNetXL
+from modules.scnet import SCNet
 
 
 
