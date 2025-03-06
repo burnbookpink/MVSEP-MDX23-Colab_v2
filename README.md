@@ -1,1 +1,1 @@
-Click here to use updated version: https://colab.research.google.com/drive/1J3EEZHUDmOs4M1OwrfpE9wl1tvTD8GBv#scrollTo=P22b2fr1q1js
+Click here to use updated version (HQ4 replaced by HQ5 + SCNet XL added): https://colab.research.google.com/drive/1LA_-v-wgHqzHldISTX0pn7BIundvfu_M
